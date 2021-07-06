@@ -137,6 +137,13 @@ class AlienInvasion:
 				self._change_fleet_direction()
 				break
 
+	def _check_aliens_bottom(self):
+		screen_rect = self.screen.get_rect()
+		for alien in self.aliens.sprites():
+			if alien.rect.bottom >= screen_rect.bottom:
+				self._ship_hit()
+				break
+
 	def _change_fleet_direction(self):
 		for alien in self.aliens.sprites():
 			alien.rect.y += self.settings.fleet_drop_speed
@@ -147,6 +154,7 @@ class AlienInvasion:
 		self.aliens.update()
 		if pygame.sprite.spritecollideany(self.ship,self.aliens):
 			self._ship_hit()
+		self._check_aliens_bottom()
 
 	def _update_screen(self):
 		""" redraw the screen during each pass through the loop """
