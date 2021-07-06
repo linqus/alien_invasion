@@ -53,10 +53,13 @@ class AlienInvasion:
 
 	def _ship_hit(self):
 		""" Repond to the ship being hit by an alien """
+		
+		# Decrement ships left
+		self.stats.ships_left -= 1
+		
 		if self.stats.ships_left > 0:
 
-			# Decrement ships left
-			self.stats.ships_left -= 1
+
 			print(self.stats.ships_left)
 			# Get rid of any remaining aliens and bullets
 			self.aliens.empty()
@@ -70,6 +73,7 @@ class AlienInvasion:
 			sleep(0.5)
 		else:
 			self.stats.game_active = False
+			pygame.mouse.set_visible(True)
 
 
 	def _check_events(self):
@@ -106,6 +110,7 @@ class AlienInvasion:
 		if not self.stats.game_active and self.play_button.rect.collidepoint(mouse_pos):
 			self.stats.reset_stats()
 			self.stats.game_active = True
+			pygame.mouse.set_visible(False)
 
 			self.aliens.empty()
 			self.bullets.empty()
