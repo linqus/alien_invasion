@@ -117,7 +117,7 @@ class AlienInvasion:
 
 			self._create_fleet()
 			self.ship.center_ship()
-
+			self.settings.init_dynamic_params()
 
 
 	def _fire_bullet(self):
@@ -137,6 +137,7 @@ class AlienInvasion:
 		if not self.aliens:
 			self.bullets.empty()
 			self._create_fleet()
+			self.settings.increase_speed()
 
 	def _create_fleet(self):
 		""" Create the fleet of aliens. """
