@@ -1,10 +1,12 @@
 import sys
 import pygame
+from time import sleep
 
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+from game_stats import GameStats
 
 class AlienInvasion:
 	""" Overall class to manage assets and behavior. """
@@ -13,15 +15,20 @@ class AlienInvasion:
 		""" Initialize the game, and create game resources. """
 		pygame.init()
 
+
+
 		self.settings = Settings()
 		if self.settings.fullscreen_game:
 			self.screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 		else:
 			self.screen = pygame.display.set_mode((self.settings.screen_width,self.settings.screen_height))
+
 		self.settings.screen_width = self.screen.get_rect().width
 		self.settings.screen_height = self.screen.get_rect().height
 
 		pygame.display.set_caption("Alien Invasion")
+
+		self.stats = GameStats(self)
 		self.ship = Ship(self)
 		self.bullets = pygame.sprite.Group()
 
@@ -39,6 +46,23 @@ class AlienInvasion:
 			self._update_bullets()
 			self._update_aliens()
 			self._update_screen()
+
+	def _ship_hit(self):
+		""" Repond to the ship being hit by an alien """
+		# Decrement ships left
+		self.stats.ships_left -= 1
+
+		# Get rid of any remaining aliens and bullets
+		self.aliens.empty()
+		self.bullets.empty()
+
+		# Create new sheep and fleet
+		self._create_fleet()
+		self.ship.center_ship()
+
+		# Pause
+		sleep(0.5)
+
 
 	def _check_events(self):
 		# watch for keyboard and mouse events.
@@ -121,6 +145,8 @@ class AlienInvasion:
 	def _update_aliens(self):
 		self._check_fleet_edges()
 		self.aliens.update()
+		if pygame.sprite.spritecollideany(self.ship,self.aliens):
+			self._ship_hit()
 
 	def _update_screen(self):
 		""" redraw the screen during each pass through the loop """
