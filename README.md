@@ -1,3 +1,5 @@
 # alien_invasion
 
-project from the crash course
+projekt z crash course
+
+![gotowa gra](/images/screen.png)
